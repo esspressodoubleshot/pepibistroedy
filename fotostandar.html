@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pepi Bistro — Foto Standar Menu</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<!-- Google Drive Picker API -->
+<script src="https://apis.google.com/js/api.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g50:#E1F5EE;--g100:#9FE1CB;--g400:#1D9E75;--g600:#0F6E56;
+  --b50:#E6F1FB;--b400:#378ADD;--b600:#185FA5;
+  --a50:#FAEEDA;--a600:#854F0B;
+  --r50:#FCEBEB;--r400:#E24B4A;--r600:#A32D2D;
+  --y50:#FFFBEB;--y400:#F59E0B;--y600:#92400E;
+  --gr400:#888780;--gr600:#5F5E5A;
+  --bg:#FFFFFF;--bg2:#F7F7F5;--bg3:#F0EFED;
+  --bdr:rgba(0,0,0,0.10);--bdr2:rgba(0,0,0,0.18);
+  --tx:#1A1A18;--tx2:#5A5957;--tx3:#9A9895;
+  --r-sm:6px;--r-md:10px;--r-lg:14px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#18181A;--bg2:#222224;--bg3:#2A2A2C;
+  --bdr:rgba(255,255,255,0.10);--bdr2:rgba(255,255,255,0.18);
+  --tx:#F0EFEC;--tx2:#A8A6A2;--tx3:#68666A;
+  --g50:#0B2E22;--b50:#0A1E34;--a50:#2A1E08;--r50:#2E0C0C;--y50:#2A1E00;
+}}
+html{font-size:15px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg2);color:var(--tx);line-height:1.5;min-height:100vh}
+.page{max-width:760px;margin:0 auto;padding:1.25rem 1rem 4rem}
+
+/* Header */
+.header{background:var(--bg);border:0.5px solid var(--bdr);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:.875rem;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hdr-l{display:flex;align-items:center;gap:12px}
+.avatar{width:40px;height:40px;border-radius:10px;background:var(--g50);color:var(--g600);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:0.5px solid var(--bdr)}
+.hdr-title{font-size:14px;font-weight:600}
+.hdr-sub{font-size:11px;color:var(--tx2);margin-top:1px}
+.hdr-btns{display:flex;gap:6px;flex-wrap:wrap}
+.btn-link{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:4px 10px;border-radius:var(--r-sm);text-decoration:none;white-space:nowrap;transition:opacity .15s;border:0.5px solid transparent}
+.btn-link:hover{opacity:.75}
+.btn-link-green{color:var(--g600);background:var(--g50);border-color:rgba(29,158,117,.25)}
+.btn-link-blue{color:var(--b600);background:var(--b50);border-color:rgba(55,138,221,.25)}
+
+/* Nav tabs */
+.nav-tabs{display:flex;gap:6px;margin-bottom:.875rem;background:var(--bg);border:0.5px solid var(--bdr);border-radius:var(--r-lg);padding:5px}
+.tab-btn{flex:1;padding:.45rem .5rem;font-size:12px;font-weight:500;border:none;border-radius:var(--r-md);background:transparent;color:var(--tx2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.tab-btn.active{background:var(--g400);color:#fff}
+.tab-btn:hover:not(.active){background:var(--bg3)}
+
+/* Session bar */
+.session-bar{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:.875rem}
+.sf label{display:block;font-size:10px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.sf select,.sf input{width:100%;font-size:12px;border:0.5px solid var(--bdr2);border-radius:var(--r-sm);padding:6px 8px;background:var(--bg);color:var(--tx)}
+.sf select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23888' stroke-width='2' d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:24px;cursor:pointer}
+.sf select:focus,.sf input:focus{outline:none;border-color:var(--g400);box-shadow:0 0 0 3px rgba(29,158,117,.12)}
+
+/* Progress summary */
+.prog-bar-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:.875rem}
+.prog-metric{background:var(--bg);border:0.5px solid var(--bdr);border-radius:var(--r-md);padding:.625rem;text-align:center}
+.prog-num{font-size:20px;font-weight:700}
+.prog-lbl{font-size:10px;color:var(--tx2);margin-top:2px}
+
+/* Category section */
+.cat-section{background:var(--bg);border:0.5px solid var(--bdr);border-radius:var(--r-lg);margin-bottom:.75rem;overflow:hidden}
+.cat-hdr{display:flex;align-items:center;justify-content:space-between;padding:.625rem 1rem;background:var(--bg2);cursor:pointer;user-select:none;border-bottom:0.5px solid transparent;transition:background .15s}
+.cat-hdr:hover{background:var(--bg3)}
+.cat-hdr.open{border-bottom-color:var(--bdr)}
+.cat-label{font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.cat-meta{display:flex;align-items:center;gap:8px}
+.cat-done-badge{font-size:10px;padding:1px 8px;border-radius:20px;background:var(--g50);color:var(--g600);font-weight:500;display:none}
+.cat-done-badge.on{display:inline-block}
+.chevron{font-size:14px;color:var(--tx3);transition:transform .2s}
+.chevron.open{transform:rotate(180deg)}
+.cat-body{display:none}
+.cat-body.open{display:block}
+
+/* Menu item card */
+.menu-card{border-top:0.5px solid var(--bdr);padding:.75rem 1rem}
+.menu-card:first-child{border-top:none}
+.menu-name{font-size:12px;font-weight:600;margin-bottom:.5rem;color:var(--tx)}
+
+/* Foto upload area */
+.foto-area{display:grid;grid-template-columns:88px 1fr;gap:.75rem;align-items:start}
+.foto-preview-box{
+  width:88px;height:88px;border:1.5px dashed var(--bdr2);border-radius:var(--r-md);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;background:var(--bg2);transition:border-color .15s,background .15s;
+  position:relative;overflow:hidden;flex-shrink:0
+}
+.foto-preview-box:hover{border-color:var(--g400);background:var(--g50)}
+.foto-preview-box.has-foto{border-style:solid;border-color:var(--g400)}
+.foto-preview-box img{width:100%;height:100%;object-fit:cover;border-radius:calc(var(--r-md) - 2px)}
+.foto-preview-box .placeholder-icon{font-size:24px;color:var(--tx3)}
+.foto-preview-box .placeholder-text{font-size:9px;color:var(--tx3);margin-top:2px;text-align:center;line-height:1.3;padding:0 4px}
+.foto-preview-box .remove-foto{
+  position:absolute;top:3px;right:3px;width:18px;height:18px;
+  background:var(--r400);color:#fff;border:none;border-radius:50%;
+  font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center
+}
+.foto-preview-box.has-foto .remove-foto{display:flex}
+
+.foto-inputs{display:flex;flex-direction:column;gap:6px}
+.foto-status-row{display:flex;gap:6px}
+.foto-status-sel{flex:1;font-size:11px;padding:5px 22px 5px 7px;border:0.5px solid var(--bdr2);border-radius:var(--r-sm);background:var(--bg);color:var(--tx);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23888' stroke-width='2' d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
+.foto-status-sel:focus{outline:none;border-color:var(--g400);box-shadow:0 0 0 3px rgba(29,158,117,.1)}
+.drive-btn{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:5px 9px;border-radius:var(--r-sm);border:0.5px solid rgba(29,158,117,.3);background:var(--g50);color:var(--g600);cursor:pointer;white-space:nowrap;transition:opacity .15s;flex-shrink:0}
+.drive-btn:hover{opacity:.8}
+.foto-link-display{font-size:10px;color:var(--b600);background:var(--b50);border:0.5px solid rgba(55,138,221,.2);border-radius:var(--r-sm);padding:4px 8px;display:none;align-items:center;gap:5px;word-break:break-all;line-height:1.4}
+.foto-link-display.show{display:flex}
+.foto-link-display a{color:inherit;text-decoration:none;flex:1}
+.foto-link-display a:hover{text-decoration:underline}
+.catatan-inp{width:100%;font-size:11px;padding:5px 7px;border:0.5px solid var(--bdr2);border-radius:var(--r-sm);background:var(--bg2);color:var(--tx);resize:none;font-family:inherit;min-height:36px}
+.catatan-inp::placeholder{color:var(--tx3)}
+.catatan-inp:focus{outline:none;border-color:var(--g400);box-shadow:0 0 0 3px rgba(29,158,117,.1)}
+
+/* Status dot indicator */
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:2px}
+.sd-ok{background:var(--g400)}
+.sd-foto{background:var(--y400)}
+.sd-warn{background:#F59E0B}
+.sd-none{background:var(--r400)}
+.sd-empty{background:var(--bdr2)}
+
+/* Hidden file input */
+input[type=file]{display:none}
+
+/* Drive picker config banner */
+.config-banner{background:var(--y50);border:0.5px solid rgba(245,158,11,.3);border-radius:var(--r-md);padding:.625rem .875rem;margin-bottom:.875rem;font-size:11px;color:var(--y600);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
+
+/* Action bar */
+.action-bar{display:flex;flex-direction:column;gap:8px;margin-top:1.25rem}
+.btn-primary{width:100%;padding:.7rem;font-size:13px;font-weight:600;border:none;border-radius:var(--r-md);background:var(--g400);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .15s,transform .1s}
+.btn-primary:hover:not(:disabled){opacity:.88}
+.btn-primary:active:not(:disabled){transform:scale(.98)}
+.btn-primary:disabled{opacity:.38;cursor:not-allowed}
+.btn-secondary{width:100%;padding:.55rem;font-size:12px;border:0.5px solid var(--bdr2);border-radius:var(--r-md);background:transparent;color:var(--tx2);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s}
+.btn-secondary:hover{background:var(--bg3)}
+
+/* Submit status */
+.submit-status{border-radius:var(--r-md);padding:.75rem 1rem;margin-top:.875rem;font-size:12px;display:none;align-items:flex-start;gap:10px;line-height:1.5}
+.submit-status.sending{display:flex;background:var(--b50);color:var(--b600)}
+.submit-status.success{display:flex;background:var(--g50);color:var(--g600)}
+.submit-status.error{display:flex;background:var(--r50);color:var(--r600)}
+.spinner{width:16px;height:16px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0;margin-top:1px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Toast */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#1A1A18;color:#fff;font-size:12px;font-weight:500;padding:.5rem 1rem;border-radius:var(--r-md);opacity:0;transition:opacity .25s;pointer-events:none;z-index:200;white-space:nowrap}
+.toast.show{opacity:1}
+
+@media(max-width:560px){
+  .session-bar{grid-template-columns:1fr 1fr}
+  .prog-bar-row{grid-template-columns:repeat(2,1fr)}
+  .foto-area{grid-template-columns:72px 1fr;gap:.5rem}
+  .foto-preview-box{width:72px;height:72px}
+  .foto-status-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- Header -->
+<div class="header">
+  <div class="hdr-l">
+    <div class="avatar">📷</div>
+    <div>
+      <div class="hdr-title">Foto Standar Menu — Pepi Bistro</div>
+      <div class="hdr-sub">Edy Saputra &nbsp;·&nbsp; Visual Check &amp; Foto Dokumentasi</div>
+    </div>
+  </div>
+  <div class="hdr-btns">
+    <a class="btn-link btn-link-green" id="link-checklist" href="index.html">
+      <i class="ti ti-checklist"></i> Checklist
+    </a>
+    <a class="btn-link btn-link-blue" id="link-sheets" href="#" target="_blank">
+      <i class="ti ti-table"></i> Google Sheets
+    </a>
+  </div>
+</div>
+
+<!-- Outlet tabs -->
+<div class="nav-tabs" id="outlet-tabs">
+  <button class="tab-btn active" onclick="switchOutlet('Hayam Wuruk',this)">🏪 HW</button>
+  <button class="tab-btn" onclick="switchOutlet('Gatot Subroto',this)">🏪 GS</button>
+  <button class="tab-btn" onclick="switchOutlet('Dalung',this)">🏪 DL</button>
+</div>
+
+<!-- Session bar -->
+<div class="session-bar">
+  <div class="sf">
+    <label>Outlet aktif</label>
+    <input type="text" id="sel-outlet" value="Hayam Wuruk" readonly style="background:var(--bg2);color:var(--tx2)">
+  </div>
+  <div class="sf">
+    <label>Bulan</label>
+    <input type="text" id="sel-bulan" placeholder="Juni 2026">
+  </div>
+  <div class="sf">
+    <label>Sous Chef</label>
+    <input type="text" id="sel-sc" value="Edy Saputra" readonly style="background:var(--bg2);color:var(--tx2)">
+  </div>
+  <div class="sf">
+    <label>Tanggal Visit</label>
+    <input type="date" id="sel-date">
+  </div>
+</div>
+
+<!-- Progress metrics -->
+<div class="prog-bar-row" id="prog-metrics">
+  <div class="prog-metric"><div class="prog-num" style="color:var(--g400)" id="pm-ok">0</div><div class="prog-lbl">✅ Approved</div></div>
+  <div class="prog-metric"><div class="prog-num" style="color:var(--y400)" id="pm-foto">0</div><div class="prog-lbl">📸 Belum Approved</div></div>
+  <div class="prog-metric"><div class="prog-num" style="color:#F59E0B" id="pm-update">0</div><div class="prog-lbl">⚠️ Perlu Update</div></div>
+  <div class="prog-metric"><div class="prog-num" style="color:var(--r400)" id="pm-none">0</div><div class="prog-lbl">❌ Belum Ada Foto</div></div>
+</div>
+
+<!-- Config banner — muncul jika Drive Client ID belum diisi -->
+<div class="config-banner" id="drive-banner" style="display:none">
+  <i class="ti ti-alert-triangle" style="font-size:15px;flex-shrink:0;margin-top:1px"></i>
+  <span>
+    <strong>Google Drive Picker belum dikonfigurasi.</strong>
+    Isi <code>GOOGLE_CLIENT_ID</code> di script untuk mengaktifkan tombol "Pilih dari Drive".
+    Sementara bisa input link Drive secara manual.
+  </span>
+</div>
+
+<!-- Checklist foto per kategori -->
+<div id="foto-root"></div>
+
+<!-- Actions -->
+<div class="action-bar">
+  <button class="btn-primary" id="btn-submit-foto">
+    <i class="ti ti-send"></i>
+    Submit Foto Standar ke Google Sheets
+  </button>
+  <button class="btn-secondary" id="btn-reset-foto">
+    <i class="ti ti-refresh"></i>
+    Reset semua isian
+  </button>
+</div>
+
+<div class="submit-status" id="sub-status">
+  <span id="sub-icon"></span>
+  <div id="sub-msg"></div>
+</div>
+
+<!-- Hidden file input for local foto preview -->
+<input type="file" id="file-input" accept="image/*" capture="environment">
+
+</div><!-- /page -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// ★ KONFIGURASI — ISI SETELAH SETUP ★
+// ============================================================
+const APPS_SCRIPT_URL  = 'GANTI_DENGAN_URL_APPS_SCRIPT_KAMU';
+const GOOGLE_SHEETS_URL = 'GANTI_DENGAN_URL_GOOGLE_SHEETS_KAMU';
+const GOOGLE_CLIENT_ID = 'GANTI_DENGAN_GOOGLE_OAUTH_CLIENT_ID';
+// Client ID: console.cloud.google.com → APIs & Services → Credentials → OAuth 2.0 Client ID
+// Scope yang dibutuhkan: https://www.googleapis.com/auth/drive.readonly
+// ============================================================
+
+// ── Menu data (sama persis v3) ──
+const MENU_CATS = [
+  { id:'main', label:'🍛 Main Course', items:['Bento / Rice Bowl','Pasta','Grill / Protein Utama','Chef Special'] },
+  { id:'app',  label:'🥗 Appetizer & Salad', items:['Fresh Salad Buffet','Savory','Dressing','Juice'] },
+  { id:'des',  label:'🍰 Dessert', items:['Cake Slice Plating','Salad Buah','Fruit Platter'] },
+  { id:'promo',label:'🚀 Promo / Seasonal', items:['Promo Bulan Ini','Paket Bundle'] },
+  { id:'vis',  label:'🧹 Visual Standard', items:['Station Plating Setup','Tray Presentation','Garnish Standard'] },
+];
+
+const STATUS_OPTS = [
+  { val:'', label:'Pilih status...', dot:'sd-empty' },
+  { val:'✅ Sudah Ada & Approved',       label:'✅ Sudah Ada & Approved',       dot:'sd-ok' },
+  { val:'📸 Sudah Foto, Belum Approved', label:'📸 Sudah Foto, Belum Approved', dot:'sd-foto' },
+  { val:'⚠️ Perlu Update Foto',          label:'⚠️ Perlu Update Foto',          dot:'sd-warn' },
+  { val:'❌ Belum Ada Foto',             label:'❌ Belum Ada Foto',             dot:'sd-none' },
+];
+
+// ── State ──
+// STATE[outlet][catId][menuItem] = { status, catatan, linkFoto, localPreview }
+const STATE = {};
+['Hayam Wuruk','Gatot Subroto','Dalung'].forEach(o => {
+  STATE[o] = {};
+  MENU_CATS.forEach(cat => {
+    STATE[o][cat.id] = {};
+    cat.items.forEach(item => {
+      STATE[o][cat.id][item] = { status:'', catatan:'', linkFoto:'', localPreview:'' };
+    });
+  });
+});
+
+let currentOutlet = 'Hayam Wuruk';
+let currentPickerTarget = null; // {outlet, catId, menuItem}
+let pickerInited = false;
+let oauthToken = null;
+const OPEN_CATS = new Set(MENU_CATS.map(c => c.id));
+
+// ── Init ──
+window.addEventListener('DOMContentLoaded', () => {
+  // Default date & bulan
+  const now = new Date();
+  document.getElementById('sel-date').value = now.toISOString().split('T')[0];
+  document.getElementById('sel-bulan').value = now.toLocaleDateString('id-ID',{month:'long',year:'numeric'});
+
+  if (GOOGLE_CLIENT_ID.startsWith('GANTI')) {
+    document.getElementById('drive-banner').style.display = 'flex';
+  }
+  if (!GOOGLE_SHEETS_URL.startsWith('GANTI')) {
+    document.getElementById('link-sheets').href = GOOGLE_SHEETS_URL;
+  }
+
+  buildUI();
+  refreshMetrics();
+});
+
+// ── Switch outlet (tab) ──
+function switchOutlet(outlet, btn) {
+  currentOutlet = outlet;
+  document.getElementById('sel-outlet').value = outlet;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildUI();
+  refreshMetrics();
+}
+
+// ── Toggle category ──
+function toggleCat(id) {
+  const was = OPEN_CATS.has(id);
+  was ? OPEN_CATS.delete(id) : OPEN_CATS.add(id);
+  document.getElementById('cbody-'+id).classList.toggle('open', !was);
+  document.getElementById('chdr-'+id).classList.toggle('open', !was);
+  document.getElementById('cchev-'+id).classList.toggle('open', !was);
+}
+
+// ── Build UI ──
+function buildUI() {
+  const root = document.getElementById('foto-root');
+  root.innerHTML = '';
+
+  MENU_CATS.forEach(cat => {
+    const sec = document.createElement('div');
+    sec.className = 'cat-section';
+    const doneCount = cat.items.filter(item =>
+      STATE[currentOutlet][cat.id][item].status === '✅ Sudah Ada & Approved'
+    ).length;
+
+    sec.innerHTML = `
+      <div class="cat-hdr open" id="chdr-${cat.id}" onclick="toggleCat('${cat.id}')">
+        <span class="cat-label">${cat.label}</span>
+        <span class="cat-meta">
+          <span class="cat-done-badge ${doneCount>0?'on':''}" id="cbadge-${cat.id}">${doneCount}/${cat.items.length} approved</span>
+          <i class="ti ti-chevron-down chevron open" id="cchev-${cat.id}"></i>
+        </span>
+      </div>
+      <div class="cat-body open" id="cbody-${cat.id}">
+        ${cat.items.map(item => buildMenuCard(cat.id, item)).join('')}
+      </div>`;
+    root.appendChild(sec);
+  });
+}
+
+// ── Build single menu item card ──
+function buildMenuCard(catId, menuItem) {
+  const s = STATE[currentOutlet][catId][menuItem];
+  const safeId = menuItem.replace(/[^a-zA-Z0-9]/g, '_') + '_' + catId;
+  const hasPreview = s.localPreview || s.linkFoto;
+
+  const statusOptions = STATUS_OPTS.map(opt =>
+    `<option value="${opt.val}" ${s.status===opt.val?'selected':''}>${opt.label}</option>`
+  ).join('');
+
+  return `
+  <div class="menu-card" id="card-${safeId}">
+    <div class="menu-name">${menuItem}</div>
+    <div class="foto-area">
+
+      <!-- Preview box / upload trigger -->
+      <div class="foto-preview-box ${hasPreview?'has-foto':''}" id="preview-${safeId}"
+           onclick="triggerFotoAction('${catId}','${menuItem.replace(/'/g,"\\'")}','${safeId}')">
+        ${s.localPreview
+          ? `<img src="${s.localPreview}" alt="preview">`
+          : hasPreview
+            ? `<i class="ti ti-photo-check" style="font-size:28px;color:var(--g400)"></i><div class="placeholder-text" style="color:var(--g600);font-size:9px">Link Drive</div>`
+            : `<i class="ti ti-camera-plus placeholder-icon"></i><div class="placeholder-text">Tap untuk pilih</div>`
+        }
+        <button class="remove-foto" onclick="removeFoto(event,'${catId}','${menuItem.replace(/'/g,"\\'")}','${safeId}')" title="Hapus foto">
+          <i class="ti ti-x" style="font-size:9px"></i>
+        </button>
+      </div>
+
+      <!-- Inputs -->
+      <div class="foto-inputs">
+        <div class="foto-status-row">
+          <select class="foto-status-sel" id="st-${safeId}"
+            onchange="onFotoStatus('${catId}','${menuItem.replace(/'/g,"\\'")}',this.value)">
+            ${statusOptions}
+          </select>
+          <button class="drive-btn" onclick="openDrivePicker('${catId}','${menuItem.replace(/'/g,"\\'")}','${safeId}')">
+            <i class="ti ti-brand-google-drive"></i> Drive
+          </button>
+        </div>
+
+        <!-- Link Drive display -->
+        <div class="foto-link-display ${s.linkFoto?'show':''}" id="link-${safeId}">
+          <i class="ti ti-link" style="font-size:11px;flex-shrink:0"></i>
+          <a href="${s.linkFoto||'#'}" target="_blank" id="link-a-${safeId}" title="${s.linkFoto}">
+            ${s.linkFoto ? truncateLink(s.linkFoto) : ''}
+          </a>
+          <button onclick="clearLink('${catId}','${menuItem.replace(/'/g,"\\'")}','${safeId}')"
+            style="background:none;border:none;cursor:pointer;color:var(--tx3);padding:0;margin-left:auto;flex-shrink:0">
+            <i class="ti ti-x" style="font-size:11px"></i>
+          </button>
+        </div>
+
+        <!-- Manual link input (muncul kalau Drive tidak configured) -->
+        <input type="text" id="manual-link-${safeId}"
+          placeholder="Atau paste link Google Drive / foto..."
+          value="${s.linkFoto||''}"
+          oninput="onManualLink('${catId}','${menuItem.replace(/'/g,"\\'")}','${safeId}',this.value)"
+          style="font-size:11px;padding:5px 7px;border:0.5px solid var(--bdr2);border-radius:var(--r-sm);background:var(--bg2);color:var(--tx);display:${GOOGLE_CLIENT_ID.startsWith('GANTI')?'block':'none'}">
+
+        <textarea class="catatan-inp" id="cat-${safeId}" rows="2"
+          placeholder="Catatan plating / garnish / temperature / penyimpangan..."
+          oninput="onCatatan('${catId}','${menuItem.replace(/'/g,"\\'")}',this.value)">${s.catatan||''}</textarea>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Event handlers ──
+function onFotoStatus(catId, menuItem, val) {
+  STATE[currentOutlet][catId][menuItem].status = val;
+  refreshMetrics();
+  refreshCatBadge(catId);
+}
+
+function onCatatan(catId, menuItem, val) {
+  STATE[currentOutlet][catId][menuItem].catatan = val;
+}
+
+function onManualLink(catId, menuItem, safeId, val) {
+  STATE[currentOutlet][catId][menuItem].linkFoto = val;
+  const linkDisp = document.getElementById('link-'+safeId);
+  const linkA = document.getElementById('link-a-'+safeId);
+  if (val) {
+    linkDisp.classList.add('show');
+    linkA.href = val;
+    linkA.textContent = truncateLink(val);
+  } else {
+    linkDisp.classList.remove('show');
+  }
+}
+
+function clearLink(catId, menuItem, safeId) {
+  STATE[currentOutlet][catId][menuItem].linkFoto = '';
+  document.getElementById('link-'+safeId).classList.remove('show');
+  const mi = document.getElementById('manual-link-'+safeId);
+  if (mi) mi.value = '';
+  refreshPreviewBox(catId, menuItem, safeId);
+}
+
+function removeFoto(e, catId, menuItem, safeId) {
+  e.stopPropagation();
+  STATE[currentOutlet][catId][menuItem].localPreview = '';
+  refreshPreviewBox(catId, menuItem, safeId);
+}
+
+function triggerFotoAction(catId, menuItem, safeId) {
+  // Jika Drive configured, buka picker; kalau tidak, buka file picker lokal
+  if (!GOOGLE_CLIENT_ID.startsWith('GANTI') && oauthToken) {
+    openDrivePicker(catId, menuItem, safeId);
+  } else {
+    // Fallback: local file preview
+    currentPickerTarget = { catId, menuItem, safeId };
+    document.getElementById('file-input').click();
+  }
+}
+
+// ── Local file preview (fallback) ──
+document.getElementById('file-input').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file || !currentPickerTarget) return;
+  const { catId, menuItem, safeId } = currentPickerTarget;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    STATE[currentOutlet][catId][menuItem].localPreview = ev.target.result;
+    refreshPreviewBox(catId, menuItem, safeId);
+  };
+  reader.readAsDataURL(file);
+  this.value = '';
+});
+
+function refreshPreviewBox(catId, menuItem, safeId) {
+  const s = STATE[currentOutlet][catId][menuItem];
+  const box = document.getElementById('preview-'+safeId);
+  if (!box) return;
+  const hasContent = s.localPreview || s.linkFoto;
+  box.classList.toggle('has-foto', !!hasContent);
+  if (s.localPreview) {
+    box.innerHTML = `
+      <img src="${s.localPreview}" alt="preview">
+      <button class="remove-foto" onclick="removeFoto(event,'${catId}','${menuItem.replace(/'/g,"\\'")}','${safeId}')" title="Hapus">
+        <i class="ti ti-x" style="font-size:9px"></i>
+      </button>`;
+  } else if (s.linkFoto) {
+    box.innerHTML = `
+      <i class="ti ti-photo-check" style="font-size:28px;color:var(--g400)"></i>
+      <div class="placeholder-text" style="color:var(--g600);font-size:9px">Link Drive</div>
+      <button class="remove-foto" onclick="removeFoto(event,'${catId}','${menuItem.replace(/'/g,"\\'")}','${safeId}')" title="Hapus">
+        <i class="ti ti-x" style="font-size:9px"></i>
+      </button>`;
+  } else {
+    box.innerHTML = `
+      <i class="ti ti-camera-plus placeholder-icon"></i>
+      <div class="placeholder-text">Tap untuk pilih</div>`;
+  }
+}
+
+// ── Google Drive Picker ──
+function loadPickerApi() {
+  if (GOOGLE_CLIENT_ID.startsWith('GANTI')) return;
+  gapi.load('picker', () => { pickerInited = true; });
+}
+
+function openDrivePicker(catId, menuItem, safeId) {
+  if (GOOGLE_CLIENT_ID.startsWith('GANTI')) {
+    showToast('Google Client ID belum diisi — gunakan input link manual');
+    return;
+  }
+  currentPickerTarget = { catId, menuItem, safeId };
+  if (!oauthToken) {
+    // Request OAuth token
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: GOOGLE_CLIENT_ID,
+      scope: 'https://www.googleapis.com/auth/drive.readonly',
+      callback: (tokenResponse) => {
+        oauthToken = tokenResponse.access_token;
+        showPicker(catId, menuItem, safeId);
+      }
+    });
+    client.requestAccessToken();
+  } else {
+    showPicker(catId, menuItem, safeId);
+  }
+}
+
+function showPicker(catId, menuItem, safeId) {
+  if (!pickerInited || !oauthToken) { showToast('Drive Picker belum siap, coba lagi'); return; }
+  const view = new google.picker.DocsView(google.picker.ViewId.DOCS)
+    .setMimeTypes('image/jpeg,image/png,image/webp,image/heic')
+    .setMode(google.picker.DocsViewMode.GRID);
+  const picker = new google.picker.PickerBuilder()
+    .addView(view)
+    .setOAuthToken(oauthToken)
+    .setDeveloperKey('') // tidak perlu kalau pakai token
+    .setCallback(data => pickerCallback(data, catId, menuItem, safeId))
+    .build();
+  picker.setVisible(true);
+}
+
+function pickerCallback(data, catId, menuItem, safeId) {
+  if (data.action !== google.picker.Action.PICKED) return;
+  const doc = data.docs[0];
+  const fileId = doc.id;
+  const fileName = doc.name;
+  const link = `https://drive.google.com/file/d/${fileId}/view`;
+  const thumb = doc.thumbnailLink || '';
+
+  STATE[currentOutlet][catId][menuItem].linkFoto = link;
+  STATE[currentOutlet][catId][menuItem].localPreview = thumb;
+
+  // Update UI
+  const linkDisp = document.getElementById('link-'+safeId);
+  const linkA = document.getElementById('link-a-'+safeId);
+  if (linkDisp && linkA) {
+    linkDisp.classList.add('show');
+    linkA.href = link;
+    linkA.textContent = truncateLink(link);
+  }
+  refreshPreviewBox(catId, menuItem, safeId);
+  showToast(`✅ "${fileName}" dipilih dari Drive`);
+}
+
+// ── Metrics ──
+function refreshMetrics() {
+  let ok=0, foto=0, update=0, none=0;
+  MENU_CATS.forEach(cat => {
+    cat.items.forEach(item => {
+      const st = STATE[currentOutlet][cat.id][item].status;
+      if (st === '✅ Sudah Ada & Approved')       ok++;
+      else if (st === '📸 Sudah Foto, Belum Approved') foto++;
+      else if (st === '⚠️ Perlu Update Foto')      update++;
+      else if (st === '❌ Belum Ada Foto')         none++;
+    });
+  });
+  document.getElementById('pm-ok').textContent    = ok;
+  document.getElementById('pm-foto').textContent  = foto;
+  document.getElementById('pm-update').textContent= update;
+  document.getElementById('pm-none').textContent  = none;
+}
+
+function refreshCatBadge(catId) {
+  const cat = MENU_CATS.find(c => c.id === catId);
+  if (!cat) return;
+  const done = cat.items.filter(item =>
+    STATE[currentOutlet][catId][item].status === '✅ Sudah Ada & Approved'
+  ).length;
+  const badge = document.getElementById('cbadge-'+catId);
+  if (badge) {
+    badge.textContent = `${done}/${cat.items.length} approved`;
+    badge.classList.toggle('on', done > 0);
+  }
+}
+
+// ── Submit to Sheets ──
+async function submitFotoToSheets() {
+  const outlet = document.getElementById('sel-outlet').value;
+  const bulan  = document.getElementById('sel-bulan').value;
+  const souschef = document.getElementById('sel-sc').value;
+
+  if (!bulan) { showToast('Isi Bulan terlebih dahulu'); return; }
+
+  // Kumpulkan semua items yang diisi
+  const fotoItems = [];
+  MENU_CATS.forEach(cat => {
+    cat.items.forEach(item => {
+      const s = STATE[outlet][cat.id][item];
+      if (s.status || s.catatan || s.linkFoto) {
+        fotoItems.push({
+          kategori: cat.label,
+          menuItem: item,
+          status: s.status || '',
+          catatan: s.catatan || '',
+          linkFoto: s.linkFoto || '',
+        });
+      }
+    });
+  });
+
+  if (!fotoItems.length) { showToast('Isi minimal 1 item sebelum submit'); return; }
+
+  const btn = document.getElementById('btn-submit-foto');
+  btn.disabled = true;
+  setSubStatus('sending', '<span class="spinner"></span>',
+    `Mengirim ${fotoItems.length} item foto ke Google Sheets…`);
+
+  if (APPS_SCRIPT_URL.startsWith('GANTI')) {
+    setTimeout(() => {
+      btn.disabled = false;
+      setSubStatus('error', '<i class="ti ti-alert-circle" style="font-size:16px;flex-shrink:0"></i>',
+        '<strong>Apps Script URL belum diisi.</strong> Data tidak terkirim.');
+    }, 600);
+    return;
+  }
+
+  const payload = {
+    type: 'foto',
+    outlet, bulan, souschef,
+    fotoItems,
+  };
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    });
+
+    btn.disabled = false;
+    setSubStatus('success',
+      '<i class="ti ti-circle-check" style="font-size:16px;flex-shrink:0;margin-top:1px"></i>',
+      `<strong>${fotoItems.length} item berhasil dikirim ke sheet "${outlet} Foto Standar".</strong><br>
+       Status, catatan, dan link Drive foto sudah terupdate di Google Sheets.`);
+
+  } catch(err) {
+    btn.disabled = false;
+    setSubStatus('error',
+      '<i class="ti ti-alert-circle" style="font-size:16px;flex-shrink:0"></i>',
+      `Gagal mengirim: ${err.message}`);
+  }
+}
+
+function setSubStatus(type, icon, msg) {
+  const el = document.getElementById('sub-status');
+  el.className = 'submit-status ' + type;
+  document.getElementById('sub-icon').innerHTML = icon;
+  document.getElementById('sub-msg').innerHTML = msg;
+}
+
+function resetAll() {
+  if (!confirm('Reset semua isian foto?')) return;
+  MENU_CATS.forEach(cat => {
+    cat.items.forEach(item => {
+      STATE[currentOutlet][cat.id][item] = { status:'', catatan:'', linkFoto:'', localPreview:'' };
+    });
+  });
+  buildUI();
+  refreshMetrics();
+  document.getElementById('sub-status').className = 'submit-status';
+  showToast('Isian direset.');
+}
+
+function truncateLink(url) {
+  if (!url) return '';
+  try {
+    const u = new URL(url);
+    return u.hostname + (u.pathname.length > 30 ? u.pathname.slice(0,30)+'…' : u.pathname);
+  } catch { return url.slice(0,40) + (url.length>40?'…':''); }
+}
+
+let toastT;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// Init Drive Picker API
+if (!GOOGLE_CLIENT_ID.startsWith('GANTI')) {
+  const s = document.createElement('script');
+  s.src = 'https://accounts.google.com/gsi/client';
+  document.head.appendChild(s);
+  window.addEventListener('load', loadPickerApi);
+}
+
+document.getElementById('btn-submit-foto').addEventListener('click', submitFotoToSheets);
+document.getElementById('btn-reset-foto').addEventListener('click', resetAll);
+</script>
+</body>
+</html>
